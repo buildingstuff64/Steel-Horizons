@@ -46,7 +46,7 @@ public class Square
 
     public override string ToString()
     {
-        return string.Format("{0} - ({1},{2})", type, x, z);
+        return string.Format("{0} - ({1},{2}) - {3}", type, x, z, piece);
     }
 
     public void resetPathfinding()

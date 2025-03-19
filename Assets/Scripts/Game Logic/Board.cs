@@ -145,9 +145,11 @@ public class Board
 
     public void MovePiece(Piece p, Square s, Vector3 rotation)
     {
-        p.MoveTo(s);
+        if (p.square != s)
+        {
+            p.MoveTo(s);
+        }
         p.Rotate(Vector3Int.RoundToInt(Quaternion.Euler(rotation) * Vector3.forward));
-        Debug.Log(p.lookDirection);
 
     }
 

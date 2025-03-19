@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using Assets.Scripts.UI;
+using DG.Tweening;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace Assets.Scripts.Game_Visuals
         private Plane mousePlane = new Plane(Vector3.up, 0);
         public Vector3 cameraHitPoint = Vector3.zero;
         public Action<SubBoardManager> onWin;
+        public bool gameEnded = false;
 
         private void Awake()
         {
@@ -46,6 +48,7 @@ namespace Assets.Scripts.Game_Visuals
             selectedPiece = null;
             rotationMarker?.SetActive(false);
             state = 0;
+            UIhud.instance.changeTeamColor(boardManager.battle.getCurrentTeam());
         }
 
         private void Update()
@@ -53,6 +56,12 @@ namespace Assets.Scripts.Game_Visuals
             mouseSquare = getMouseOverSquare(boardManager.board);
             if (mouseSquare != null && !isAnimation)
             {
+                if (gameEnded) 
+                {
+                    isAnimation = true;
+                    closeSubBoard();
+                }
+
                 boardManager.Viewer.clearSelection();
 
                 switch (state)
@@ -73,7 +82,7 @@ namespace Assets.Scripts.Game_Visuals
 
                 if (Input.GetKeyDown(KeyCode.End))
                 {
-                    closeSubBoard();
+                    gameEnded = true;
                 }
 
                 boardManager.Viewer.setSelectedSquare(mouseSquare, new Color(1, 1, 1, 0.5f));

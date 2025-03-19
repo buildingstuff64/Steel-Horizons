@@ -10,6 +10,10 @@ public class SubBoardManager : BoardManager
 {
     public Battle battle;
     public Square mainBoardSquare;
+    public ArmyPiece TeamA, TeamB;
+    public ArmyPiece winner;
+    public ArmyPiece loser;
+    public Action<SubBoardManager> onWin;
 
     private void Awake()
     {
@@ -23,12 +27,27 @@ public class SubBoardManager : BoardManager
         print(teamB.formation.Count);
 
         board = new Board(xsize, zsize, mainboardsquare.type);
-        battle = new Battle(board, teamA.formation, teamB.formation, teamA.team, teamB.team);
+        battle = new Battle(board, teamA.formation, teamB.formation, teamA.team, teamB.team, () =>
+        {
+            if (battle.winner == teamA.team){ winner = teamA; loser = teamB; }
+            if (battle.winner == teamB.team) { winner = teamB; loser = teamA; }
+
+            GetComponent<SubBoardPlayerController>().gameEnded = true;
+        });
+
+        TeamA = teamA;
+        TeamB = teamB;
 
         this.mainBoardSquare = mainboardsquare;
         GetComponent<SubBoardPlayerController>().onWin = onWin;
+        GetComponent<SubBoardPlayerController>().resetSelectionState();
         Viewer.Set(this);
         Viewer.UpdateView();
+    }
+
+    public ArmyPiece getWinner()
+    {
+        return winner;
     }
 
 

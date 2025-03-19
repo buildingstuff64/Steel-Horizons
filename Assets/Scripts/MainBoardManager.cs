@@ -41,6 +41,18 @@ namespace Assets.Scripts
             moveOrders.Add(moveOrder);
         }
 
+        public MoveOrder getPieceMoveOrder(ArmyPiece p)
+        {
+            foreach (var order in moveOrders)
+            {
+                if (order.piece == p)
+                {
+                    return order;
+                }
+            }
+            return null;
+        }
+
 
         public List<MoveIntersection> finalIntersection = new List<MoveIntersection>();
         List<Piece> found = new List<Piece>();

@@ -1,4 +1,5 @@
 using Assets.Scripts.Game_Logic.SubPieces;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,10 @@ public class Battle
 
     List<ArmyFormation> teamA, teamB;
 
-    public Battle(Board b, List<ArmyFormation> teamA, List<ArmyFormation> teamB, Color teamAColor, Color teamBColor)
+    public Color winner;
+    private Action onWin;
+
+    public Battle(Board b, List<ArmyFormation> teamA, List<ArmyFormation> teamB, Color teamAColor, Color teamBColor, Action onWin)
     {
         board = b;
 
@@ -31,23 +35,21 @@ public class Battle
         this.teamA = teamA;
         this.teamB = teamB;
 
-        startBattle();
+        this.onWin = onWin;
+
         startTurn();
 
     }
-
-    public void startBattle()
-    {
-        
-    }
-
-    public void stopBattle()
-    {
-
-    }
+    
 
     public void startTurn()
     {
+        if (checkForWin()) 
+        {  
+            onWin.Invoke();
+            return; 
+        }
+
         foreach (Square square in board.squares) square.isBlocked = false;
 
         for (int i = 0; i < board.pieces.Count; i++)
@@ -67,6 +69,20 @@ public class Battle
             }
         }
 
+    }
+
+    public bool checkForWin()
+    {
+        bool Awin = true;
+        bool Bwin = true;
+        foreach (var p in board.pieces)
+        {
+            if (p.team == teams[1]) { Awin = false; }
+            if (p.team == teams[0]) { Bwin = false; }
+        }
+        if (Awin) { winner = teams[0]; return true; }
+        if (Bwin) { winner = teams[1]; return true; }
+        return false;
     }
 
     public void makeMove(Piece p, Square s, Vector3 rotation)
@@ -91,4 +107,5 @@ public class Battle
     {
         return currentPlayer ? teams[0] : teams[1];
     }
+
 }

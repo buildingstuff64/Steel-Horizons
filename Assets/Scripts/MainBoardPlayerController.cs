@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Game_Visuals.Visual_Sub_Pieces;
+using Assets.Scripts.UI;
 
 namespace Assets.Scripts
 {
@@ -37,6 +38,8 @@ namespace Assets.Scripts
         [SerializeField] private int armyRange = 25;
         Stack<MoveIntersection> battles = new Stack<MoveIntersection> ();
 
+        List<List<Square>> selectedPaths = new List<List<Square>> ();
+
 
         private void Start()
         {
@@ -61,6 +64,7 @@ namespace Assets.Scripts
             selectedPiece = null;
             rotationMarker?.SetActive(false);
             state = 0;
+            selectedPaths.Clear();
         }
 
         private void Update()
@@ -80,27 +84,35 @@ namespace Assets.Scripts
                 {
                     case 0:
                         selectPiece();
+                        boardManager.Viewer.setSelectedSquare(mouseSquare, new Color(1, 1, 1, 0.5f));
                         break;
                     case 1:
-                        SelectMove();
+                        SelectPiecePath();
                         break;
                 }
 
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    ArmyPiece a1 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(1, 0, 0)), PieceType.Army, Vector3Int.forward, Color.red);
+                    ArmyPiece a1 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(2, 0, 0)), PieceType.Army, Vector3Int.forward, Color.red);
+                    ArmyPiece a2 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(0, 0, 2)), PieceType.Army, Vector3Int.forward, Color.blue);
 
-                    for (int i = 0; i < 5; i++)
-                    {
-                        a1.formation.Add(new ArmyFormation((PieceType)i+1, new Vector3Int(0, 0, i*2), Vector3Int.right));
-                    }
 
-                    ArmyPiece a2 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(0, 0, 1)), PieceType.Army, Vector3Int.forward, Color.blue);
+                    //for (int i = 0; i < 5; i++)
+                    //{
+                    //    a1.formation.Add(new ArmyFormation((PieceType)i+1, new Vector3Int(0, 0, i*2), Vector3Int.right));
+                    //}
 
-                    for (int i = 0; i < 5; i++)
-                    {
-                        a2.formation.Add(new ArmyFormation((PieceType)i+1, new Vector3Int(0, 0, i*2), Vector3Int.right));
-                    }
+                    //ArmyPiece a2 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(0, 0, 1)), PieceType.Army, Vector3Int.forward, Color.blue);
+
+                    //for (int i = 0; i < 5; i++)
+                    //{
+                    //    a2.formation.Add(new ArmyFormation((PieceType)i+1, new Vector3Int(0, 0, i*2), Vector3Int.right));
+                    //}
+                    a1.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 1), Vector3Int.right));
+                    a2.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 1), Vector3Int.right));
+                    a1.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 2), Vector3Int.right));
+                    a2.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 2), Vector3Int.right));
+
 
                     boardManager.Viewer.UpdatePieceGameobjects();
 
@@ -125,7 +137,7 @@ namespace Assets.Scripts
 
                     foreach (MoveOrder order in orders)
                     {
-                        boardManager.board.MovePiece(order.piece, order.targetPos, Vector3.forward);
+                        boardManager.board.MovePiece(order.piece, order.path[^1], Vector3.forward);
                         boardManager.Viewer.getVisualPiece(order.piece).PlayPathAnimation(order.path, () => { });
                         
                     }
@@ -142,45 +154,23 @@ namespace Assets.Scripts
 
                 }
 
+                if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.I))
+                {
+                    print(mouseSquare);
+                }
+
 
                 boardManager.Viewer.setSelectedSquares(boardManager.Viewintersetions, Color.magenta);
-                boardManager.Viewer.setSelectedSquare(mouseSquare, new Color(1, 1, 1, 0.5f));
+                //boardManager.Viewer.setSelectedSquare(mouseSquare, new Color(1, 1, 1, 0.5f));
             }
 
         }
 
         public void startBattle()
         {
-
+            if (battles.Count == 0) return;
             MoveIntersection i = battles.Pop();
             createSubBoard(i);
-
-        }
-
-        public void closeSubBoard(SubBoardManager manager)
-        {
-            GameObject cam = PrefabManager.instance.Camera;
-            Sequence seq = DOTween.Sequence();
-            Color ogColor = Camera.main.backgroundColor;
-            seq.Append(Camera.main.DOColor(MeshGenerator.Instance.materials[((int)manager.mainBoardSquare.type) - 1].color, 0.5f).OnComplete(() =>
-            {
-                Camera.main.backgroundColor = ogColor;
-                Camera.main.orthographicSize = 0.1f;
-                gameObject.SetActive(true);
-                cam.transform.position = manager.mainBoardSquare.position;
-                cam.transform.rotation = Quaternion.Euler(0, 0, 0);
-                Camera.main.DOOrthoSize(10f, 1f).OnComplete(() =>
-                {
-                    if (battles.Count > 0)
-                    {
-                        startBattle();
-                    }
-                    else
-                    {
-                        isEnabled = true;
-                    }
-                });
-            }));
 
         }
 
@@ -192,36 +182,80 @@ namespace Assets.Scripts
             {
                 if (!mouseSquare.hasPiece()) return;
                 selectedPiece = mouseSquare.piece;
+                MoveOrder existingOrder = boardManager.getPieceMoveOrder(selectedPiece as ArmyPiece);
+                if (existingOrder != null)
+                {
+                    existingOrder.path.Remove(mouseSquare);
+                    selectedPaths.Add(new List<Square>() { mouseSquare });
+                    selectedPaths.Add(existingOrder.path);
+                }
+                else
+                {
+                    selectedPaths.Add(new List<Square>() { mouseSquare });
+                }
                 state = 1;
             }
         }
 
-        public void SelectMove()
+        public void SelectPiecePath()
         {
-            if (Input.GetKeyDown(KeyCode.Mouse1))
+            foreach (MoveOrder i in boardManager.moveOrders)
             {
-                state = 0;
-                selectedPiece = null;
-                return;
+                if (i.piece.team != selectedPiece.team)
+                {
+                    boardManager.Viewer.setSelectedSquares(i.path, new Color(1, 0, 0, 0.5f));
+                }
+                if (i.piece.team == selectedPiece.team && i.piece != selectedPiece)
+                {
+                    boardManager.Viewer.setSelectedSquares(i.path, new Color(0, 1, 0, 0.5f));
+                }
             }
 
-            List<Square> path = boardManager.board.getStraightWithBackup(selectedPiece.square, mouseSquare, new SquareType[] {SquareType.Water});
-            if (path == null) return;
-            if (path.Count > armyRange)
+            List<Square> flatPath = selectedPaths.SelectMany(x => x).ToList();
+
+            List<Square> newPath = new List<Square>();
+            newPath = boardManager.board.getStraightWithBackup(flatPath[^1], mouseSquare, new SquareType[3] { SquareType.Water, SquareType.Grass, SquareType.Sand });
+            if (newPath == null) return;
+            
+            boardManager.Viewer.setSelectedSquares(flatPath, new Color(1, 0.92f, 0.016f, 0.25f));
+            if (flatPath.Count + newPath.Count > armyRange)
             {
-                boardManager.Viewer.setSelectedSquares(path.GetRange(0, armyRange), Color.yellow);
-                boardManager.Viewer.setSelectedSquares(path.Skip(armyRange).ToList(), Color.red);
+                boardManager.Viewer.setSelectedSquares(newPath.GetRange(0, armyRange - flatPath.Count), Color.yellow);
+                boardManager.Viewer.setSelectedSquares(newPath.Skip(armyRange - flatPath.Count).ToList(), Color.red);
             }
             else
             {
-                boardManager.Viewer.setSelectedSquares(path, Color.yellow);
+                boardManager.Viewer.setSelectedSquares(newPath, Color.yellow);
+
+
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    boardManager.addMoveOrder(selectedPiece as ArmyPiece, mouseSquare, path);
-                    state = 0;
-                    selectedPiece = null;
-                    return;
+                    if (newPath.Count > 0)
+                    {
+                        selectedPaths.Add(newPath);
+                    }
+                    else
+                    {
+                        boardManager.addMoveOrder(selectedPiece as ArmyPiece, mouseSquare, flatPath);
+                        state = 0;
+                        selectedPiece = null;
+                        selectedPaths.Clear();
+                        return;
+                    }
                 }
+
+            }
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                if (selectedPaths.Count > 1)
+                {
+                    selectedPaths.RemoveAt(selectedPaths.Count-1);
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                resetSelectionState();
             }
         }
 
@@ -263,13 +297,48 @@ namespace Assets.Scripts
                 Camera.main.DOColor(og, 2f);
                 CameraObj.transform.DOMoveY(0, 2f).SetEase(Ease.InOutSine).OnComplete(() =>
                 {
-
+                    UIhud.instance.show(true);
 
                 });
                 boardManager.gameObject.SetActive(false);
 
             });
             seq.Play();
+        }
+
+        public void closeSubBoard(SubBoardManager manager)
+        {
+            GameObject cam = PrefabManager.instance.Camera;
+            Sequence seq = DOTween.Sequence();
+            Color ogColor = Camera.main.backgroundColor;
+            UIhud.instance.show(false);
+            seq.Append(Camera.main.DOColor(MeshGenerator.Instance.materials[((int)manager.mainBoardSquare.type) - 1].color, 0.5f).OnComplete(() =>
+            {
+                Camera.main.backgroundColor = ogColor;
+                Camera.main.orthographicSize = 0.1f;
+                gameObject.SetActive(true);
+                cam.transform.position = manager.mainBoardSquare.position;
+                targetPos = cam.transform.position;
+                cam.transform.rotation = Quaternion.Euler(0, 0, 0);
+                Camera.main.DOOrthoSize(10f, 1f).OnComplete(() =>
+                {
+                    boardManager.Viewer.getVisualPiece(manager.winner).transform.DOScale(Vector3.one, 1f);
+                    boardManager.board.MovePiece(manager.winner, manager.mainBoardSquare, manager.winner.lookDirection);
+                    boardManager.board.removePiece(manager.loser);
+                    //boardManager.Viewer.getVisualPiece(manager.winner).PlayMoveAnimation(manager.winner.square, manager.mainBoardSquare, manager.winner.lookDirection, () => { });
+                    boardManager.Viewer.removePiece(manager.loser);
+
+                    boardManager.board.removePiece(manager.loser);
+                    if (battles.Count > 0)
+                    {
+                        startBattle();
+                    }
+                    else
+                    {
+                        isEnabled = true;
+                    }
+                });
+            }));     
         }
     }
 }
