@@ -42,7 +42,7 @@ public class SubBoardManager : BoardManager
         GetComponent<SubBoardPlayerController>().onWin = onWin;
         GetComponent<SubBoardPlayerController>().resetSelectionState();
         Viewer.Set(this);
-        Viewer.UpdateView();
+        Viewer.UpdateView(true);
     }
 
     public ArmyPiece getWinner()

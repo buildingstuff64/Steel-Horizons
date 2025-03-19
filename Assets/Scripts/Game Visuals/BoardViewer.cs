@@ -83,10 +83,10 @@ namespace Assets.Scripts.Game_Visuals
             }
         }
 
-        public void UpdateView()
+        public void UpdateView(bool x)
         {
             CreateMesh();
-            createSelectionGrid();
+            if (x) { createSelectionGrid(); }
             UpdatePieceGameobjects();
         }
 

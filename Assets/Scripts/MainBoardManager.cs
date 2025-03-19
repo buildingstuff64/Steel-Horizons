@@ -15,12 +15,15 @@ namespace Assets.Scripts
 {
     public class MainBoardManager : BoardManager
     {
+        [SerializeField] private bool create_on_start = true;
         [SerializeField] int xsize, zsize;
 
         [SerializeField] private List<float> noiseScales = new List<float>();
         [SerializeField] private List<float> Amplitides = new List<float>();
 
         [SerializeField] private float waterThreshold, grassThreshold, sandThreshold;
+        [SerializeField] private float strength = 3;
+        [SerializeField] private float amp = 3;
 
         private float randomOffset;
 
@@ -194,17 +197,26 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            randomOffset = Random.Range(0, 100000f);
-
+            if (!create_on_start) return;
             createMainBoard();
         }
 
         public void createMainBoard()
         {
+            randomOffset = Random.Range(0, 100000f);
             board = new Board(xsize, zsize, getSquareType);
 
             Viewer.Set(this);
-            Viewer.UpdateView();
+            Viewer.UpdateView(true);
+        }
+
+        public void createPrettyBoard()
+        {
+            randomOffset = Random.Range(0, 100000f);
+            board = new Board(xsize, zsize, getSquareType);
+
+            Viewer.Set(this);
+            Viewer.UpdateView(false);
         }
 
         private SquareType getSquareType(int x, int z)
@@ -217,10 +229,21 @@ namespace Assets.Scripts
                 i++;
             }
             noise /= Amplitides.Sum();
+
+            noise *= getGradient(x, z);
+
             if (noise < waterThreshold) { return SquareType.Water; }
             if (noise < sandThreshold) { return SquareType.Sand; }
             if (noise < grassThreshold) { return SquareType.Grass; }
             return SquareType.Grass;
+        }
+
+        private float getGradient(int x, int z)
+        {
+            float maxrad = Vector2.Distance(new Vector2(0, 0), new Vector2(xsize * .5f, zsize * .5f));
+            float distance = Vector2.Distance(new Vector2(x, z), new Vector2(xsize*.5f, zsize*.5f));
+            float norm = Mathf.Clamp(distance / maxrad, 0, 1);
+            return Mathf.Pow(1f - norm, strength) * amp;
         }
 
     }
