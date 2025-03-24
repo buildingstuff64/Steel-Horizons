@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: Sniper
   m_EditorClassIdentifier: 
   pieceType: 2
-  prefab: {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
+  prefab:
+  - {fileID: 2916680421338865712, guid: 2b40d61d43dbbe34eaf82c1e06884f0e, type: 3}
+  - {fileID: 7723960216481223460, guid: 1e032b5e5cc11074e99770bedef5d0bf, type: 3}
+  - {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
   icon: {fileID: 0}
+  cost: 0

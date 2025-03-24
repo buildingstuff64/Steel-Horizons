@@ -28,13 +28,13 @@ namespace Assets.Scripts.Game_Visuals
             instance = this;
         }
         
-        public GameObject getPiecePrefab(PieceType t)
+        public GameObject getPiecePrefab(Piece t)
         {
             foreach (PiecePrefabData data in pieces)
             {
-                if (data.pieceType == t)
+                if (data.pieceType == t.type)
                 {
-                    return data.prefab;
+                    return data.getPrefabBasedOnTile(t);
                 }
             }
             return null;

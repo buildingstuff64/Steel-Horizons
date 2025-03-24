@@ -2077,6 +2077,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7eea828da521cc447905bace2e1c7e67, type: 2}
   - {fileID: 11400000, guid: 8869ca36dbacce14bb0970a2c119c56c, type: 2}
   - {fileID: 11400000, guid: cfd8806d0c1d49a47bc5078ff635d3ca, type: 2}
+  - {fileID: 11400000, guid: 538361649c5682d4b991736f63cae76f, type: 2}
   projectilePrefab: {fileID: 4160667111160279313, guid: 928b2ebbcf5d32c49846e6aef461033f, type: 3}
   gridViewPrefab: {fileID: 5224980616231829083, guid: eb4be3e88c3dce84997368906f778c4a, type: 3}
   subBoardPrefab: {fileID: 100689458509525053, guid: c5eed0e4c66b08c419ca06891c8393a5, type: 3}
@@ -2234,6 +2235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Viewer: {fileID: 0}
+  create_on_start: 1
   xsize: 64
   zsize: 64
   noiseScales:
@@ -2249,6 +2251,8 @@ MonoBehaviour:
   waterThreshold: 0.6
   grassThreshold: 1
   sandThreshold: 0.65
+  strength: 3
+  amp: 3
   subBoardSize: 10
 --- !u!114 &2086707458
 MonoBehaviour:

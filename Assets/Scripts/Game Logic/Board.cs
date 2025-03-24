@@ -1,11 +1,8 @@
 using Assets.Scripts.Game_Logic.SubPieces;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -38,7 +35,7 @@ public class Board
         }
     }
 
-    public Board(int xsize, int zsize, Func<int, int, SquareType> getSquareType)
+    public Board(int xsize, int zsize, System.Func<int, int, SquareType> getSquareType)
     {
         squares = new Square[xsize, zsize];
         this.xsize = xsize;
@@ -133,6 +130,9 @@ public class Board
 
             case PieceType.Army:
                 s.piece = new ArmyPiece(s, lookDirection, type, team);
+                break;
+            case PieceType.Structure:
+                s.piece = new StructurePiece(s, lookDirection, type, team); 
                 break;
 
             default:
@@ -319,6 +319,48 @@ public class Board
         path.Reverse();
 
         return path;
+    }
+
+    public void createStructures(int count)
+    {
+        List<StructurePiece> centers = new List<StructurePiece>();
+        int cols = Mathf.CeilToInt(Mathf.Sqrt(count));
+        int rows = Mathf.CeilToInt((float)count / cols);
+
+        float cellWidth = (float) xsize / cols;
+        float cellheight = (float) zsize / rows;
+
+        for (int x = 0; x < rows; x++)
+        {
+            for (int z = 0; z < cols; z++)
+            {
+                int px = Mathf.RoundToInt((z + 0.5f) * cellWidth);
+                int pz = Mathf.RoundToInt((x + 0.5f) * cellheight); 
+                Square pos = getSquare(px + Random.Range(-5, 5), pz + Random.Range(-5, 5));
+                addPiece(pos, PieceType.Structure, Vector3Int.FloorToInt(directions[Random.Range(0, 4)]), Color.grey);
+                StructurePiece sp = pos.piece as StructurePiece;
+                centers.Add(sp);
+            }
+        }
+        Debug.Log(centers.Count);
+
+        foreach (Square s in squares)
+        {
+            StructurePiece min = null;
+            float distmin = 10000000;
+            foreach (StructurePiece sp in centers)
+            {
+                Debug.Log(sp.square.position);
+                if (Vector3.Distance(s.position, sp.square.position) < distmin)
+                {
+                    min = sp;
+                    distmin = Vector3.Distance(s.position, sp.square.position);
+                }
+            }
+            min.territory.Add(s); 
+        }
+
+
     }
 
 

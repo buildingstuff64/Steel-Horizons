@@ -28,7 +28,7 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
             moveSequence.Append(transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InCirc));
             moveSequence.Append(transform.DOMove(to.position, 0f));
             moveSequence.Append(transform.DORotate(rotation, 0f));
-            moveSequence.Append(transform.DOScale(Vector3.one*0.5f, 0.5f).SetEase(Ease.OutCirc));
+            moveSequence.Append(transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutCirc));
             moveSequence.Append(transform.DOShakeScale(0.5f, 0.25f));
             moveSequence.OnComplete(() => onComplete.Invoke());
         }

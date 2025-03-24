@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: Teleporter
   m_EditorClassIdentifier: 
   pieceType: 4
-  prefab: {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
+  prefab:
+  - {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
+  - {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
+  - {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
   icon: {fileID: 0}
+  cost: 0

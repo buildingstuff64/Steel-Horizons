@@ -205,6 +205,7 @@ namespace Assets.Scripts
         {
             randomOffset = Random.Range(0, 100000f);
             board = new Board(xsize, zsize, getSquareType);
+            board.createStructures(16);
 
             Viewer.Set(this);
             Viewer.UpdateView(true);
@@ -212,6 +213,7 @@ namespace Assets.Scripts
 
         public void createPrettyBoard()
         {
+
             randomOffset = Random.Range(0, 100000f);
             board = new Board(xsize, zsize, getSquareType);
 

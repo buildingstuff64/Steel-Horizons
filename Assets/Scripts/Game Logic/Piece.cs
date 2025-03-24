@@ -119,4 +119,4 @@ public abstract class Piece
  
 }
 
-public enum PieceType { None, Mech, Sniper, Shield, Teleporter, Support, Battleship, Destroyer, ShieldShip, Submarine, Carrier, Army }
+public enum PieceType { None, Mech, Sniper, Shield, Teleporter, Support, Battleship, Destroyer, ShieldShip, Submarine, Carrier, Army, Structure }

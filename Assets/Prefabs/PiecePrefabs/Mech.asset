@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: Mech
   m_EditorClassIdentifier: 
   pieceType: 1
-  prefab: {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
+  prefab:
+  - {fileID: 3357414450165429079, guid: 9a5fd80e8c47f3049bff52b87eaf6b70, type: 3}
+  - {fileID: 8840253435155705881, guid: a99c5af9436e23d4e85ac697fb7d0006, type: 3}
+  - {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
   icon: {fileID: 0}
+  cost: 0

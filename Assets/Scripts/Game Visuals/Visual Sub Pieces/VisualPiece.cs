@@ -19,9 +19,14 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
         {
             foreach (var child in transform.GetComponentsInChildren<Transform>())
             {
-                if (child.name == "Cube")
+                if (child.name == "Team")
                 {
-                    child.GetComponent<MeshRenderer>().material.color = piece.team;
+                    child.GetComponent<MeshRenderer>().material.DOColor(piece.team, 1f);
+                }
+
+                if (child.name == "Team2")
+                {
+                    child.GetComponent<MeshRenderer>().material.DOColor(Color.Lerp(child.GetComponent<MeshRenderer>().material.color, piece.team, 0.5f), 1f);
                 }
 
                 if (child.GetComponent<TMP_Text>()  != null)
@@ -83,7 +88,7 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
                     return typeof(VisualMech);
 
                 case PieceType.Submarine:
-                    return typeof(VisualMech);
+                    return typeof(VisualSubmarine);
 
                 case PieceType.Carrier:
                     return typeof(VisualMech);
@@ -91,6 +96,8 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
                 case PieceType.Army:
                     return typeof(VisualMech);
 
+                case PieceType.Structure:
+                    return typeof(VisualStructure);
                 default:
                     Debug.LogWarning("Unknown piece type!");
                     break;

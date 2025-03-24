@@ -78,6 +78,13 @@ namespace Assets.Scripts
             mouseSquare = getMouseOverSquare(boardManager.board);
             if (mouseSquare != null)
             {
+                if (Input.GetKeyDown(KeyCode.LeftShift))
+                {
+                    boardManager.Viewer.viewTerritory();
+                }
+
+                if (Input.GetKey(KeyCode.LeftShift)) return;
+
                 boardManager.Viewer.clearSelection();
 
                 switch (state)
@@ -85,6 +92,13 @@ namespace Assets.Scripts
                     case 0:
                         selectPiece();
                         boardManager.Viewer.setSelectedSquare(mouseSquare, new Color(1, 1, 1, 0.5f));
+                        if (mouseSquare.hasPiece())
+                        {
+                            if (mouseSquare.piece.type == PieceType.Structure)
+                            {
+                                boardManager.Viewer.viewTerritory(mouseSquare.piece as StructurePiece);
+                            }
+                        }
                         break;
                     case 1:
                         SelectPiecePath();
@@ -159,7 +173,6 @@ namespace Assets.Scripts
                     print(mouseSquare);
                 }
 
-
                 boardManager.Viewer.setSelectedSquares(boardManager.Viewintersetions, Color.magenta);
                 //boardManager.Viewer.setSelectedSquare(mouseSquare, new Color(1, 1, 1, 0.5f));
             }
@@ -168,7 +181,36 @@ namespace Assets.Scripts
 
         public void startBattle()
         {
-            if (battles.Count == 0) return;
+            if (battles.Count < 1)
+            {
+                Debug.Log("updateing territory");
+                foreach (Piece p in boardManager.board.pieces)
+                {
+                    if (p.type != PieceType.Structure) continue;
+
+                    StructurePiece sp = p as StructurePiece;
+                    List<Piece> pieces = new List<Piece>();
+                    foreach (Square s in sp.territory)
+                    {
+                        if (!s.hasPiece()) continue;
+                        if (s.piece == p) continue;
+                        pieces.Add(s.piece);
+                    }
+
+                    Color Team = Color.grey;
+                    Debug.Log(pieces.Count);
+                    foreach (Piece piece in pieces)
+                    {
+                        if (Team == Color.grey) { Team = piece.team; }
+
+                        if (Team != piece.team) { Team = Color.grey; break; }
+                    }
+                    if (Team != Color.grey) { sp.team = Team; }
+                    boardManager.Viewer.getVisualPiece(p).setVisuals();
+                }
+                
+                return;
+            };
             MoveIntersection i = battles.Pop();
             createSubBoard(i);
 
@@ -181,10 +223,12 @@ namespace Assets.Scripts
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 if (!mouseSquare.hasPiece()) return;
+                if (mouseSquare.hasStructure()) return;
                 selectedPiece = mouseSquare.piece;
                 MoveOrder existingOrder = boardManager.getPieceMoveOrder(selectedPiece as ArmyPiece);
                 if (existingOrder != null)
                 {
+                    boardManager.moveOrders.Remove(existingOrder);
                     existingOrder.path.Remove(mouseSquare);
                     selectedPaths.Add(new List<Square>() { mouseSquare });
                     selectedPaths.Add(existingOrder.path);
@@ -269,6 +313,7 @@ namespace Assets.Scripts
             isEnabled = false;
             Color og = Camera.main.backgroundColor;
             Sequence seq = DOTween.Sequence();
+            targetPos = s.position;
             seq.Append(CameraObj.transform.DOMove(s.position, 1f).SetEase(Ease.InOutSine));
             seq.Append(visA.transform.DOMove(s.position, 1f))
                 .Join(visB.transform.DOMove(s.position, 1f))
@@ -329,14 +374,8 @@ namespace Assets.Scripts
                     boardManager.Viewer.removePiece(manager.loser);
 
                     boardManager.board.removePiece(manager.loser);
-                    if (battles.Count > 0)
-                    {
-                        startBattle();
-                    }
-                    else
-                    {
-                        isEnabled = true;
-                    }
+                    startBattle();
+                    if (battles.Count == 0) { isEnabled = true; }
                 });
             }));     
         }

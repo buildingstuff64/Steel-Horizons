@@ -14,6 +14,7 @@ public class Square
     public float gCost, fCost, hCost;
     public Square prev;
     public object data;
+    public Color territory;
 
     public Square(int x, int z, SquareType type, Board board)
     {
@@ -42,6 +43,11 @@ public class Square
     public bool hasPiece()
     {
         return piece != null;
+    }
+
+    public bool hasStructure()
+    {
+        return piece.type == PieceType.Structure;
     }
 
     public override string ToString()

@@ -2275,23 +2275,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fd7fd34275874f4e852c76dba72b4b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Viewer: {fileID: 0}
+  Viewer: {fileID: 1700372731}
   create_on_start: 0
   xsize: 64
   zsize: 64
   noiseScales:
-  - 25
-  - 15
-  - 45
+  - 35
+  - 22
+  - 50
   - 10
   Amplitides:
   - 1
   - 2
   - 0.35
   - 3
-  waterThreshold: 0.6
+  waterThreshold: 0.5
   grassThreshold: 1
-  sandThreshold: 0.65
+  sandThreshold: 0.55
+  strength: 0.46
+  amp: 1.16
   subBoardSize: 10
 --- !u!114 &1700372731
 MonoBehaviour:

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Game_Visuals.Visual_Sub_Pieces;
+﻿using Assets.Scripts.Game_Logic.SubPieces;
+using Assets.Scripts.Game_Visuals.Visual_Sub_Pieces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace Assets.Scripts.Game_Visuals
             foreach (Piece p in boardManager.board.pieces)
             {
                 if (pieceObjects.ContainsKey(p)) continue;
-                GameObject g = Instantiate(PrefabManager.instance.getPiecePrefab(p.type), this.transform);
+                GameObject g = Instantiate(PrefabManager.instance.getPiecePrefab(p), this.transform);
                 Type T = VisualPiece.getVisualPieceType(p.type);
                 g.AddComponent(T);
                 VisualPiece visP = g.GetComponent<VisualPiece>();
@@ -142,6 +143,23 @@ namespace Assets.Scripts.Game_Visuals
                 }
             }
             selectionTexture.Apply();
+        }
+
+        public void viewTerritory()
+        {
+            foreach (Piece piece in boardManager.board.pieces)
+            {
+                if (piece.type == PieceType.Structure)
+                {
+                    StructurePiece sp = piece as StructurePiece;
+                    setSelectedSquares(sp.territory, sp.team * new Color(1, 1, 1, 0.25f));
+                }
+            }
+        }
+
+        public void viewTerritory(StructurePiece sp)
+        {
+            setSelectedSquares(sp.territory, new Color(1,1,1,0.25f));
         }
     }
 }
