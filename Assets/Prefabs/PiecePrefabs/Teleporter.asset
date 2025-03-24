@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieceType: 4
   prefab:
-  - {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
-  - {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
-  - {fileID: 8320422696828591035, guid: 3fd3875f8dd15cc4eb0b24ecf8e925bd, type: 3}
+  - {fileID: 3408776327680351205, guid: c8358532c42187e4385734a37168bc14, type: 3}
+  - {fileID: 4117197184192290464, guid: 379d17e93bae83c459202bcbeb7d0746, type: 3}
   icon: {fileID: 0}
   cost: 0
