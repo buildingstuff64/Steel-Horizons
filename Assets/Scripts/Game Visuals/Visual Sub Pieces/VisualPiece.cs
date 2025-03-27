@@ -29,9 +29,9 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
                     child.GetComponent<MeshRenderer>().material.DOColor(Color.Lerp(child.GetComponent<MeshRenderer>().material.color, piece.team, 0.5f), 1f);
                 }
 
-                if (child.GetComponent<TMP_Text>()  != null)
+                if (child.GetComponent<TMP_Text>() != null)
                 {
-                    child.GetComponent<TMP_Text>().text = piece.type.ToString();
+                    child.GetComponent<TMP_Text>().DOColor(piece.team, 1f);
                 }
             }
         }
