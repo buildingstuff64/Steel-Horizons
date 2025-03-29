@@ -23,10 +23,10 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
         public override void PlayMoveAnimation(Square from, Square to, Vector3 rotation, Action onComplete)
         {
             Sequence moveSequence = DOTween.Sequence();
-            moveSequence.Append(transform.DOMoveY(-1, 1f));
-            moveSequence.Append(transform.DOMove(to.position, 0f));
+            moveSequence.Append(transform.DOMoveY(-0.25f, 2f));
+            moveSequence.Append(transform.DOMove(to.position + Vector3.down*0.25f, 0f));
             moveSequence.Append(transform.DORotate(rotation, 0f));
-            moveSequence.Append(transform.DOMoveY(0, 1f));
+            moveSequence.Append(transform.DOMoveY(0, 2f));
             moveSequence.OnComplete(() => onComplete.Invoke());
         }
     }

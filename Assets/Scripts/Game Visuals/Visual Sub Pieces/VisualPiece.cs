@@ -55,8 +55,32 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
             onComplete.Invoke();
         }
 
-        public static Type getVisualPieceType(PieceType type)
+        public static Type getVisualPieceType(PieceType type, Square s)
         {
+            if (s.type == SquareType.Water)
+            {
+                switch (type)
+                {
+                    case PieceType.None:
+                        Debug.Log("No piece selected.");
+                        break;
+
+                    case PieceType.Mech:
+                        return typeof(VisualMech);
+
+                    case PieceType.Sniper:
+                        return typeof(VisualSniper);
+
+                    case PieceType.Shield:
+                        return typeof(VisualShield);
+
+                    case PieceType.Teleporter:
+                        return typeof(VisualSubmarine);
+
+                    case PieceType.Support:
+                        return typeof(VisualSupport);
+                }
+            }
             switch (type)
             {
                 case PieceType.None:

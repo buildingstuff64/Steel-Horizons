@@ -46,7 +46,7 @@ namespace Assets.Scripts.Game_Visuals
             {
                 if (pieceObjects.ContainsKey(p)) continue;
                 GameObject g = Instantiate(PrefabManager.instance.getPiecePrefab(p), this.transform);
-                Type T = VisualPiece.getVisualPieceType(p.type);
+                Type T = VisualPiece.getVisualPieceType(p.type, p.square);
                 g.AddComponent(T);
                 VisualPiece visP = g.GetComponent<VisualPiece>();
                 visP.piece = p;
