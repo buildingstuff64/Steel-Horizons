@@ -1,10 +1,8 @@
 using Assets.Scripts;
 using Assets.Scripts.Game_Logic.SubPieces;
 using Assets.Scripts.Game_Visuals;
-using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -43,6 +41,11 @@ public class MenuController : MonoBehaviour
         {
             timer = 0;
             manager.createPrettyBoard();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftControl))
+        {
+            SaveTexture(boardimg.mainTexture as Texture2D, "BoardImage");
         }
     }
 
@@ -99,6 +102,21 @@ public class MenuController : MonoBehaviour
     public void setSeed()
     {
         seed.text = manager.data.seed.ToString();
+    }
+
+    private void SaveTexture(Texture2D texture, string name)
+    {
+        byte[] bytes = texture.EncodeToPNG();
+        var dirPath = Application.dataPath + "/" + name;
+        if (!System.IO.Directory.Exists(dirPath))
+        {
+            System.IO.Directory.CreateDirectory(dirPath);
+        }
+        System.IO.File.WriteAllBytes(dirPath + ".png", bytes);
+        Debug.Log(bytes.Length / 1024 + "Kb was saved as: " + dirPath);
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.Refresh();
+#endif
     }
 
 

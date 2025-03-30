@@ -23,12 +23,23 @@ namespace Assets.Scripts.UI
         [SerializeField] private GameObject nextturnHint;
 
         private RectTransform panelstartvalue;
+        public bool exitmenu = false;
+        public GameObject exitGo;
 
         private void Awake()
         {
             instance = this;
             panelstartvalue = mainpanel;
             mainpanel.DOAnchorPosY(200, 0f).SetEase(Ease.OutSine);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                exitmenu = !exitmenu;
+                exitGo.SetActive(exitmenu);
+            }
         }
 
         public void show(bool x)
@@ -67,6 +78,11 @@ namespace Assets.Scripts.UI
         public void mainMenu()
         {
             SceneManager.LoadScene("MainMenu");
+        }
+
+        public void quitgame()
+        {
+            Application.Quit();
         }
 
         public void showhint(bool x)

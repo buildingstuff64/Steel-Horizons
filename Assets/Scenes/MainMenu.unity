@@ -3240,7 +3240,7 @@ MonoBehaviour:
   boardimg: {fileID: 1688451293}
   seed: {fileID: 695182921}
   teamColorPrefab: {fileID: 0}
-  pieceCount: 1
+  pieceCount: 6
   teams:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
