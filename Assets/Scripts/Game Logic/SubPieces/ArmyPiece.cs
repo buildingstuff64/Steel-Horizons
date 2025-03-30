@@ -17,6 +17,7 @@ namespace Assets.Scripts.Game_Logic.SubPieces
 
     }
 
+    [System.Serializable]
     public class ArmyFormation
     {
         public PieceType piece;

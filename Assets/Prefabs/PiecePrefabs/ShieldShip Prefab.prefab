@@ -177,6 +177,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9b68bf4ac7e4bd84f8ca3d6024019d2d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6bc1a5c1d8747344bb8b713572d9a758, type: 2}
     - target: {fileID: 919132149155446097, guid: 9b68bf4ac7e4bd84f8ca3d6024019d2d, type: 3}
       propertyPath: m_Name
       value: ShieldWaterModel

@@ -15,6 +15,6 @@ MonoBehaviour:
   pieceType: 5
   prefab:
   - {fileID: 4800992450688856348, guid: 99127edf3cb133e499eafeb02ff16884, type: 3}
-  - {fileID: 8305957549987439973, guid: 9ff19133ecb9fd840956974fc583baed, type: 3}
+  - {fileID: 1819379227869752465, guid: a07b143751213864a9b0be4326e18470, type: 3}
   icon: {fileID: 0}
   cost: 0

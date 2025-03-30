@@ -55,6 +55,11 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
             onComplete.Invoke();
         }
 
+        virtual public void showTooltip(bool x)
+        {
+
+        }
+
         public static Type getVisualPieceType(PieceType type, Square s)
         {
             if (s.type == SquareType.Water)

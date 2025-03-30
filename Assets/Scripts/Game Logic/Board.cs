@@ -214,7 +214,7 @@ public class Board
 
             foreach (Square neighbour in node.getNeighbours())
             {
-                if (neighbour.isBlocked || closed.Contains(neighbour)) continue;
+                if (neighbour.isBlocked || closed.Contains(neighbour) || neighbour.hasPiece()) continue;
                 if (!walkableTypes.Contains(neighbour.type)) continue;
 
                 float newCostToNeighbour = node.gCost + Vector3.Distance(node.position, neighbour.position);
@@ -342,7 +342,6 @@ public class Board
                 centers.Add(sp);
             }
         }
-        Debug.Log(centers.Count);
 
         foreach (Square s in squares)
         {
@@ -350,7 +349,6 @@ public class Board
             float distmin = 10000000;
             foreach (StructurePiece sp in centers)
             {
-                Debug.Log(sp.square.position);
                 if (Vector3.Distance(s.position, sp.square.position) < distmin)
                 {
                     min = sp;
@@ -361,6 +359,20 @@ public class Board
         }
 
 
+    }
+
+    public override string ToString()
+    {
+        string str = "Board \n";
+        for (int x = 0; x < xsize; x++)
+        {
+            for (int z = 0; z < zsize; z++)
+            {
+                str += getSquare(x, z).hasPiece() ? "[0]" : "[ ]";
+            }
+            str += "\n";
+        }
+        return str;
     }
 
 

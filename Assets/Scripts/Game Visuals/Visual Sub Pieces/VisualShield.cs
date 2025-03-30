@@ -37,7 +37,7 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
         {
             ShieldPiece sh = piece as ShieldPiece;
             print(sh);
-            if (sh.turnsSinceMoved > 1)
+            if (sh.turnsSinceMoved > 2)
             {
                 shieldObject.SetActive(true);
                 if (shieldObject.transform.localScale.x != 0.5f)

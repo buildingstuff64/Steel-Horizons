@@ -2,6 +2,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,6 +24,8 @@ namespace Assets.Scripts.Game_Visuals
         public Vector3 cameraHitPoint = Vector3.zero;
         public Action<SubBoardManager> onWin;
         public bool gameEnded = false;
+
+        public List<Square> debugSquares = new List<Square>();
 
         private void Awake()
         {
@@ -49,6 +52,7 @@ namespace Assets.Scripts.Game_Visuals
             rotationMarker?.SetActive(false);
             state = 0;
             UIhud.instance.changeTeamColor(boardManager.battle.getCurrentTeam());
+            boardManager.battle.startTurn();
         }
 
         private void Update()
@@ -63,6 +67,37 @@ namespace Assets.Scripts.Game_Visuals
                 }
 
                 boardManager.Viewer.clearSelection();
+
+                if (Input.GetKeyDown(KeyCode.End))
+                {
+                    gameEnded = true;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Home))
+                {
+                   print(boardManager.board.ToString());
+                }
+
+                if (Input.GetKey(KeyCode.LeftControl))
+                {
+                    if (Input.GetKeyDown(KeyCode.F1))
+                    {
+                        debugSquares.AddRange(mouseSquare.getNeighbours());
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.F2))
+                    {
+                        foreach (Square s in boardManager.board.squares)
+                        {
+                            if (!s.hasPiece()) continue;
+                            if (s.piece.isSupported) { debugSquares.Add(s); }
+                        }
+                    }
+                }
+                else
+                {
+                    debugSquares.Clear();
+                }
 
                 switch (state)
                 {
@@ -80,11 +115,8 @@ namespace Assets.Scripts.Game_Visuals
                         break;
                 }
 
-                if (Input.GetKeyDown(KeyCode.End))
-                {
-                    gameEnded = true;
-                }
 
+                boardManager.Viewer.setSelectedSquares(debugSquares, Color.magenta);
                 boardManager.Viewer.setSelectedSquare(mouseSquare, new Color(1, 1, 1, 0.5f));
 
             }

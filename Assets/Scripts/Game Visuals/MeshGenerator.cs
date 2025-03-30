@@ -18,6 +18,20 @@ namespace Assets
             Instance = this;
         }
 
+        public Color getSqTypeColor(SquareType type)
+        {
+            switch (type)
+            {
+                case SquareType.Water:
+                    return materials[0].color;
+                case SquareType.Grass:
+                    return materials[1].color;
+                case SquareType.Sand:
+                    return materials[2].color;
+            }
+            return Color.magenta;
+        }
+
         private GameObject createMeshObject(Mesh m)
         {
             GameObject mesh = new GameObject("");
@@ -107,7 +121,6 @@ namespace Assets
                 Vector3 v1 = Vector3.zero, v2 = Vector3.zero;
                 float x = dir[i].x;
                 float z = dir[i].z;
-                print(s.position);
                 if (x == 0)
                 {
                     v1 = s.position + (new Vector3(z, 0, z) / 2);

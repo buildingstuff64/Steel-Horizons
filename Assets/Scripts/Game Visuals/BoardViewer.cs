@@ -62,8 +62,8 @@ namespace Assets.Scripts.Game_Visuals
         public void removePiece(Piece p)
         {
             VisualPiece visp = pieceObjects[p];
-            Destroy(visp.gameObject);
             pieceObjects.Remove(p);
+            Destroy(visp.gameObject);
         }
 
         public void PlayAttackPieceAnimation(Piece from, Piece to, Action onComplete)
@@ -78,6 +78,16 @@ namespace Assets.Scripts.Game_Visuals
 
         public void PlayStartTurnAnimations()
         {
+            List<Piece> pieces = new List<Piece>();
+            foreach (Piece p in pieceObjects.Keys)
+            {
+                if (!boardManager.board.pieces.Contains(p))
+                {
+                    pieces.Add(p);
+                }
+            }
+            foreach (Piece p in pieces) removePiece(p);
+
             foreach (VisualPiece vis in pieceObjects.Values)
             {
                 vis.PlayTurnStartAnimation(() => { });
@@ -160,6 +170,22 @@ namespace Assets.Scripts.Game_Visuals
         public void viewTerritory(StructurePiece sp)
         {
             setSelectedSquares(sp.territory, new Color(1,1,1,0.25f));
+        }
+
+        public Texture2D getBoardTexture()
+        {
+            Board b = boardManager.board;
+            Texture2D tex = new Texture2D(b.xsize, b.zsize);
+            tex.filterMode = FilterMode.Point;
+            for (int x = 0;x < b.xsize; x++)
+            {
+                for (int z = 0; z < b.zsize; z++)
+                {
+                    tex.SetPixel(x, z, MeshGenerator.Instance.getSqTypeColor(b.getSquare(x, z).type));
+                }
+            }
+            tex.Apply();
+            return tex;
         }
     }
 }

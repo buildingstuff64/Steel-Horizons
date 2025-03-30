@@ -1,6 +1,8 @@
 ﻿using DG.Tweening;
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
@@ -14,6 +16,11 @@ namespace Assets.Scripts.UI
 
         [SerializeField] private Image mainColor;
         [SerializeField] private Image animationColor;
+
+        [SerializeField] private GameObject winPanel;
+        [SerializeField] private TMP_Text wintext;
+
+        [SerializeField] private GameObject nextturnHint;
 
         private RectTransform panelstartvalue;
 
@@ -40,12 +47,40 @@ namespace Assets.Scripts.UI
         {
             animationColor.gameObject.SetActive(true);
             animationColor.color = color;
-            animationColor.transform.localScale = new Vector3(0, 1, 1);
-            animationColor.transform.DOScaleX(1, 1f).SetEase(Ease.InSine).OnComplete(() =>
+            animationColor.transform.localScale = new Vector3(0.45f, 1, 1);
+            animationColor.transform.DOScaleX(1, 0.5f).SetEase(Ease.InOutQuart).OnComplete(() =>
             {
                 mainColor.color = color;
                 animationColor.gameObject.SetActive(false);
             });
+        }
+
+        public void showWinner(string win, Color c)
+        {
+            winPanel.SetActive(true);
+            winPanel.transform.localScale = Vector3.zero;
+            winPanel.GetComponent<Image>().color = c;
+            wintext.text = win;
+            winPanel.transform.DOScale(1f, 1f);
+        }
+
+        public void mainMenu()
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+
+        public void showhint(bool x)
+        {
+            if (x) 
+            {
+                nextturnHint.SetActive(true);
+                nextturnHint.transform.DOScale(1f, 0f); 
+            }
+            else
+            {
+                nextturnHint.transform.DOScale(0f, 0f);
+                nextturnHint.SetActive(false);
+            }
         }
     }
 }

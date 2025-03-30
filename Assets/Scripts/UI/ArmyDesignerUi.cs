@@ -50,7 +50,6 @@ namespace Assets.Scripts.UI
                 }
             }
 
-            print(p);
             setSelectedSquares(p.getAvaliableMoves(p.square), Color.yellow);
             //avaiableMoveTexture.texture = selectionTexture;
             avaiableMoveTexture.material.SetVector("_GridSize", new Vector2(b.xsize, b.zsize));

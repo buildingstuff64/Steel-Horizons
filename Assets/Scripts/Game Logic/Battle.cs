@@ -26,7 +26,7 @@ public class Battle
 
         foreach (ArmyFormation f in teamB)
         {
-            board.addPiece(board.getSquare(board.xsize-1 - f.position.x, f.position.z), f.piece, -f.lookDirection, teamBColor);
+            board.addPiece(board.getSquare(board.xsize-1 - f.position.x, board.zsize-1-f.position.z), f.piece, -f.lookDirection, teamBColor);
         }
 
         teams[0] = teamAColor;
@@ -44,20 +44,19 @@ public class Battle
 
     public void startTurn()
     {
-        if (checkForWin()) 
-        {  
-            onWin.Invoke();
-            return; 
+
+        foreach (Square square in board.squares)
+        {
+            square.isBlocked = false;
+            if (square.hasPiece()) square.piece.isSupported = false;
         }
 
-        foreach (Square square in board.squares) square.isBlocked = false;
-
-        for (int i = 0; i < board.pieces.Count; i++)
+        foreach (Square square in board.squares)
         {
-            board.pieces[i].isSupported = false;
-            if (board.pieces[i].type == PieceType.Support)
+            if (!square.hasPiece())continue;
+            if (square.piece.type == PieceType.Support || square.piece.type == PieceType.Carrier)
             {
-                board.pieces[i].onStartTurn();
+                square.piece.onStartTurn();
             }
         }
 
@@ -67,6 +66,13 @@ public class Battle
             {
                 board.pieces[i].onStartTurn();
             }
+        }
+
+        if (checkForWin()) 
+        {
+            Debug.Log("winner");
+            onWin.Invoke();
+            return; 
         }
 
     }

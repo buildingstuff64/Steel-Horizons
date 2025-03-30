@@ -39,11 +39,18 @@ namespace Assets.Scripts
         Stack<MoveIntersection> battles = new Stack<MoveIntersection> ();
 
         List<List<Square>> selectedPaths = new List<List<Square>> ();
-
+        public Color teamA;
+        public Color teamB;
+        public Color currentTeam;
+        public int teamturn = 0;
+        public int turnsleft;
 
         private void Start()
         {
             CameraObj = PrefabManager.instance.Camera;
+            updateTeam();
+            UIhud.instance.show(true);
+            UIhud.instance.changeTeamColor(currentTeam);
         }
 
         public Square getMouseOverSquare(Board b)
@@ -108,24 +115,24 @@ namespace Assets.Scripts
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
                     ArmyPiece a1 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(2, 0, 0)), PieceType.Army, Vector3Int.forward, Color.red);
-                    ArmyPiece a2 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(0, 0, 2)), PieceType.Army, Vector3Int.forward, Color.blue);
+                    //ArmyPiece a2 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(0, 0, 2)), PieceType.Army, Vector3Int.forward, Color.blue);
 
 
-                    //for (int i = 0; i < 5; i++)
-                    //{
-                    //    a1.formation.Add(new ArmyFormation((PieceType)i+1, new Vector3Int(0, 0, i*2), Vector3Int.right));
-                    //}
+                    for (int i = 0; i < 5; i++)
+                    {
+                        a1.formation.Add(new ArmyFormation((PieceType)i + 1, new Vector3Int(0, 0, i * 2), Vector3Int.right));
+                    }
 
-                    //ArmyPiece a2 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(0, 0, 1)), PieceType.Army, Vector3Int.forward, Color.blue);
+                    ArmyPiece a2 = (ArmyPiece)boardManager.board.addPiece(mouseSquare.getSquareOffset(new Vector3Int(0, 0, 1)), PieceType.Army, Vector3Int.forward, Color.blue);
 
-                    //for (int i = 0; i < 5; i++)
-                    //{
-                    //    a2.formation.Add(new ArmyFormation((PieceType)i+1, new Vector3Int(0, 0, i*2), Vector3Int.right));
-                    //}
-                    a1.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 1), Vector3Int.right));
-                    a2.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 1), Vector3Int.right));
-                    a1.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 2), Vector3Int.right));
-                    a2.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 2), Vector3Int.right));
+                    for (int i = 0; i < 5; i++)
+                    {
+                        a2.formation.Add(new ArmyFormation((PieceType)i + 1, new Vector3Int(0, 0, i * 2), Vector3Int.right));
+                    }
+                    //a1.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 1), Vector3Int.right));
+                    //a2.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 1), Vector3Int.right));
+                    //a1.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 2), Vector3Int.right));
+                    //a2.formation.Add(new ArmyFormation(PieceType.Sniper, new Vector3Int(0, 0, 2), Vector3Int.right));
 
 
                     boardManager.Viewer.UpdatePieceGameobjects();
@@ -147,25 +154,9 @@ namespace Assets.Scripts
 
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    var (orders, intersections) = boardManager.moveAllPieces();
-
-                    foreach (MoveOrder order in orders)
-                    {
-                        boardManager.board.MovePiece(order.piece, order.path[^1], Vector3.forward);
-                        boardManager.Viewer.getVisualPiece(order.piece).PlayPathAnimation(order.path, () => { });
-                        
-                    }
-
-                    intersections.Reverse();
-                    foreach (MoveIntersection item in intersections)
-                    {
-                        battles.Push(item);
-                    }
-                    transform.DOMove(transform.position, 2f).OnComplete(() =>
-                    {
-                        startBattle();
-                    });
-
+                    teamturn++;
+                    updateTeam();
+                    
                 }
 
                 if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.I))
@@ -173,16 +164,53 @@ namespace Assets.Scripts
                     print(mouseSquare);
                 }
 
-                boardManager.Viewer.setSelectedSquares(boardManager.Viewintersetions, Color.magenta);
+                if (Input.GetKeyDown(KeyCode.End))
+                {
+                    print("ending game");
+                    boardManager.endGame();
+                }
+
+                boardManager.Viewer.setSelectedSquares(boardManager.Viewintersetions, new Color(1, 1, 1, 0.5f));
                 //boardManager.Viewer.setSelectedSquare(mouseSquare, new Color(1, 1, 1, 0.5f));
             }
 
+        }
+
+        
+
+        public void updateTeam()
+        {
+
+            switch (teamturn)
+            {
+                case 0:
+                    currentTeam = teamA;
+                    break;
+                case 1:
+                    currentTeam = teamB;
+                    break;
+                case 2:
+                    turnsleft--;
+                    if (turnsleft <= 0)
+                    {
+                        boardManager.endGame();
+                    }
+                    startIntersections();
+                    teamturn = 0;
+                    currentTeam = teamA;
+                    break;
+            }
+            if (teamturn == 1 || teamturn == 0) { UIhud.instance.show(true); }
+            UIhud.instance.changeTeamColor(currentTeam);
         }
 
         public void startBattle()
         {
             if (battles.Count < 1)
             {
+                boardManager.Viewintersetions.Clear();
+                boardManager.checkend();
+                updateTeam();
                 Debug.Log("updateing territory");
                 foreach (Piece p in boardManager.board.pieces)
                 {
@@ -216,6 +244,29 @@ namespace Assets.Scripts
 
         }
 
+        public void startIntersections()
+        {
+            UIhud.instance.show(false);
+            var (orders, intersections) = boardManager.moveAllPieces();
+
+            foreach (MoveOrder order in orders)
+            {
+                boardManager.board.MovePiece(order.piece, order.path[^1], Vector3.forward);
+                boardManager.Viewer.getVisualPiece(order.piece).PlayPathAnimation(order.path, () => { });
+
+            }
+
+            intersections.Reverse();
+            foreach (MoveIntersection item in intersections)
+            {
+                battles.Push(item);
+            }
+            transform.DOMove(transform.position, 2f).OnComplete(() =>
+            {
+                startBattle();
+            });
+        }
+
         public void selectPiece()
         {
             selectedPiece = null;
@@ -224,6 +275,7 @@ namespace Assets.Scripts
             {
                 if (!mouseSquare.hasPiece()) return;
                 if (mouseSquare.hasStructure()) return;
+                if (mouseSquare.piece.team != currentTeam) return;
                 selectedPiece = mouseSquare.piece;
                 MoveOrder existingOrder = boardManager.getPieceMoveOrder(selectedPiece as ArmyPiece);
                 if (existingOrder != null)
@@ -258,6 +310,7 @@ namespace Assets.Scripts
             List<Square> flatPath = selectedPaths.SelectMany(x => x).ToList();
 
             List<Square> newPath = new List<Square>();
+            if (mouseSquare.hasPiece()) return;
             newPath = boardManager.board.getStraightWithBackup(flatPath[^1], mouseSquare, new SquareType[3] { SquareType.Water, SquareType.Grass, SquareType.Sand });
             if (newPath == null) return;
             
@@ -305,6 +358,8 @@ namespace Assets.Scripts
 
         public void createSubBoard(MoveIntersection intersection)
         {
+            UIhud.instance.showhint(false);
+            UIhud.instance.show(false);
             Square s = intersection.square;
             ArmyPiece pieceA = intersection.A.piece;
             ArmyPiece pieceB = intersection.B.piece;
@@ -375,7 +430,7 @@ namespace Assets.Scripts
 
                     boardManager.board.removePiece(manager.loser);
                     startBattle();
-                    if (battles.Count == 0) { isEnabled = true; }
+                    if (battles.Count == 0) { isEnabled = true; UIhud.instance.show(true); UIhud.instance.showhint(true); }
                 });
             }));     
         }

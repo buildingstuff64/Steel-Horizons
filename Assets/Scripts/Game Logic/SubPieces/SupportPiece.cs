@@ -29,13 +29,17 @@ namespace Assets.Scripts.Game_Logic.SubPieces
 
         public override void onStartTurn()
         {
-            base.onStartTurn();
-            foreach (Square s in square.getNeighbours())
+            List<Square> squares = new List<Square>
             {
-                if (s.hasPiece())
-                {
-                    s.piece.isSupported = true;
-                }
+                square.getSquareOffset(Vector3Int.forward),
+                square.getSquareOffset(Vector3Int.left),
+                square.getSquareOffset(Vector3Int.right),
+                square.getSquareOffset(Vector3Int.back)
+            };
+            foreach (Square square in squares)
+            {
+                if (square == null) continue;
+                if (square.hasPiece()) square.piece.isSupported = true;
             }
         }
 

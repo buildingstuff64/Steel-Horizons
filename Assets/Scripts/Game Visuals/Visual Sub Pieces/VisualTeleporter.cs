@@ -25,10 +25,16 @@ namespace Assets.Scripts.Game_Visuals.Visual_Sub_Pieces
         {
             Sequence moveSequence = DOTween.Sequence();
             moveSequence.Append(transform.DOShakeScale(0.5f, 0.5f));
-            moveSequence.Append(transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InCirc));
-            moveSequence.Append(transform.DOMove(to.position, 0f));
+
+            moveSequence.Join(transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InExpo));
+            moveSequence.Join(transform.DOMove(transform.position + transform.forward, 0.5f).SetEase(Ease.InExpo));
+
             moveSequence.Append(transform.DORotate(rotation, 0f));
-            moveSequence.Append(transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutCirc));
+            moveSequence.Append(transform.DOMove(to.position - piece.lookDirection, 0f));
+
+            moveSequence.Join(transform.DOMove(to.position, 0.5f).SetEase(Ease.OutExpo));
+            moveSequence.Join(transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutExpo));
+
             moveSequence.Append(transform.DOShakeScale(0.5f, 0.25f));
             moveSequence.OnComplete(() => onComplete.Invoke());
         }

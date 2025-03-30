@@ -10,7 +10,7 @@ namespace Assets.Scripts.Game_Logic.SubPieces
         public ShieldPiece(Square s, Vector3Int lookDirection, PieceType t, Color team) : base(s, lookDirection, t, team) { }
 
         List<Square> blockedSpaces = new List<Square>();
-        public int turnsSinceMoved = 1;
+        public int turnsSinceMoved = 2;
         public override List<Square> getAvaliableMoves(Square s)
         {
             List<Square> result = new List<Square>();
@@ -64,7 +64,7 @@ namespace Assets.Scripts.Game_Logic.SubPieces
 
             blockedSpaces.RemoveAll(item => item == null);
 
-            if (turnsSinceMoved > 1)
+            if (turnsSinceMoved > 2)
             {
                 foreach (Square square in blockedSpaces)
                 {

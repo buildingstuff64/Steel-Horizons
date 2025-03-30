@@ -42,15 +42,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 7aae91f4dcc03b746acb1b3973243074, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.10968859
+      value: 0.47228613
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7aae91f4dcc03b746acb1b3973243074, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.10968859
+      value: 0.47228613
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7aae91f4dcc03b746acb1b3973243074, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.10968859
+      value: 0.47228613
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7aae91f4dcc03b746acb1b3973243074, type: 3}
       propertyPath: m_LocalPosition.x
@@ -96,6 +96,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SubmarineModel
       objectReference: {fileID: 0}
+    - target: {fileID: 4424396828587804706, guid: 7aae91f4dcc03b746acb1b3973243074, type: 3}
+      propertyPath: m_Name
+      value: Team
+      objectReference: {fileID: 0}
+    - target: {fileID: 6317578925029434746, guid: 7aae91f4dcc03b746acb1b3973243074, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b44941d19d081e54dbbcada148e3297b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

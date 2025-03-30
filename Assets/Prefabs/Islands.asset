@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4442ab3639e7906438a7252afe7f4a67, type: 3}
+  m_Name: Islands
+  m_EditorClassIdentifier: 
+  xsize: 64
+  zsize: 64
+  noiseScales:
+  - 35
+  - 22
+  - 50
+  - 10
+  Amplitides:
+  - 1
+  - 2
+  - 0.35
+  - 3
+  waterThreshold: 0.5
+  grassThreshold: 1
+  sandThreshold: 0.55
+  strength: 0.46
+  amp: 1.16
+  seed: 0

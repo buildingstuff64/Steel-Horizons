@@ -142,7 +142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a2e89eb11cf26c040a2d3e6abc31e3d2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.091
+      value: 0.007
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a2e89eb11cf26c040a2d3e6abc31e3d2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -176,10 +176,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5568371526223589888, guid: a2e89eb11cf26c040a2d3e6abc31e3d2, type: 3}
+      propertyPath: m_Name
+      value: Team2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4683669308469848369, guid: a2e89eb11cf26c040a2d3e6abc31e3d2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 257fb8edbf1543540aeddef6c04e2d4a, type: 2}
     - target: {fileID: 919132149155446097, guid: a2e89eb11cf26c040a2d3e6abc31e3d2, type: 3}
       propertyPath: m_Name
       value: ShieldLandModel
       objectReference: {fileID: 0}
+    - target: {fileID: 7071182760956848314, guid: a2e89eb11cf26c040a2d3e6abc31e3d2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 257fb8edbf1543540aeddef6c04e2d4a, type: 2}
+    - target: {fileID: 7202271454713460447, guid: a2e89eb11cf26c040a2d3e6abc31e3d2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 257fb8edbf1543540aeddef6c04e2d4a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
