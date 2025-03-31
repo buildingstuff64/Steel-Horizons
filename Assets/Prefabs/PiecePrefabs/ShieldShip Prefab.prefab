@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 6bc1a5c1d8747344bb8b713572d9a758, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -147,7 +147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b68bf4ac7e4bd84f8ca3d6024019d2d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.1301
+      value: -0.273
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b68bf4ac7e4bd84f8ca3d6024019d2d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -183,7 +183,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 6bc1a5c1d8747344bb8b713572d9a758, type: 2}
     - target: {fileID: 919132149155446097, guid: 9b68bf4ac7e4bd84f8ca3d6024019d2d, type: 3}
       propertyPath: m_Name
-      value: ShieldWaterModel
+      value: Team
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -248,7 +248,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4826808841919835826, guid: 9a5fd80e8c47f3049bff52b87eaf6b70, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a5fd80e8c47f3049bff52b87eaf6b70, type: 3}
