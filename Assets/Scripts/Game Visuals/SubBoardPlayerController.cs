@@ -26,11 +26,15 @@ namespace Assets.Scripts.Game_Visuals
         public bool gameEnded = false;
 
         public List<Square> debugSquares = new List<Square>();
+        public float infoTimer;
+        private Square lastMouseSquare = null;
+        [SerializeField] private UIPopups popup;
 
         private void Awake()
         {
             rotationMarker = Instantiate(PrefabManager.instance.rotationMarker);
             rotationMarker.SetActive(false);
+            popup = UIPopups.Instance;
         }
 
         public Square getMouseOverSquare(Board b)
@@ -60,6 +64,16 @@ namespace Assets.Scripts.Game_Visuals
             mouseSquare = getMouseOverSquare(boardManager.board);
             if (mouseSquare != null && !isAnimation)
             {
+                if (mouseSquare == lastMouseSquare) { infoTimer += Time.deltaTime; }
+                else { infoTimer = 0; popup.show(false); }
+
+                if (infoTimer > 1.25f && mouseSquare.hasPiece())
+                {
+                    popup.currentPiece = UIPopupsInfo.getRealType(mouseSquare.piece.type, mouseSquare.type);
+                    popup.show(true);
+                    popup.updatePositions();
+                }
+
                 if (gameEnded) 
                 {
                     isAnimation = true;
@@ -118,8 +132,9 @@ namespace Assets.Scripts.Game_Visuals
 
                 boardManager.Viewer.setSelectedSquares(debugSquares, Color.magenta);
                 boardManager.Viewer.setSelectedSquare(mouseSquare, new Color(1, 1, 1, 0.5f));
-
+                lastMouseSquare = mouseSquare;
             }
+            else { infoTimer = 0; popup.show(false); }
 
         }
 

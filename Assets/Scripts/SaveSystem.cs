@@ -36,14 +36,14 @@ namespace Assets.Scripts
             File.WriteAllText (getPath(filename), json);
         }
 
-        public static object Load<T>(string filename)
+        public static T Load<T>(string filename)
         {
             if (File.Exists(getPath(filename)))
             {
                 string json = File.ReadAllText (getPath(filename));
                 return JsonUtility.FromJson<T>(json);
             }
-            return null;
+            return default(T);
         }
     }
 }
