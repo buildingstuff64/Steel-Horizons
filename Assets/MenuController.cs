@@ -2,7 +2,9 @@ using Assets.Scripts;
 using Assets.Scripts.Game_Logic.SubPieces;
 using Assets.Scripts.Game_Visuals;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -117,6 +119,40 @@ public class MenuController : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
 #endif
+    }
+
+    public void settingsFolder()
+    {
+        OpenInWinFileBrowser(Application.persistentDataPath);
+    }
+
+    public void quitGame()
+    {
+        Application.Quit();
+    }
+
+    public static void OpenInWinFileBrowser(string path)
+    {
+        bool openInsidesOfFolder = false;
+
+        // try windows
+        string winPath = path.Replace("/", "\\"); // windows explorer doesn't like forward slashes
+
+        if (Directory.Exists(winPath)) // if path requested is a folder, automatically open insides of that folder
+        {
+            openInsidesOfFolder = true;
+        }
+        try
+        {
+            System.Diagnostics.Process.Start("explorer.exe", (openInsidesOfFolder ? "/root," : "/select,") + winPath);
+        }
+        catch (System.ComponentModel.Win32Exception e)
+        {
+            // tried to open win explorer in mac
+            // just silently skip error
+            // we currently have no platform define for the current OS we are in, so we resort to this
+            e.HelpLink = ""; // do anything with this variable to silence warning about not using it
+        }
     }
 
 
